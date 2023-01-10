@@ -7,5 +7,15 @@
                 "excludedTypes": "Request"
             }
         }
+    },
+    "IsEncrypted": false,
+    "Values": {
+      "AzureWebJobsStorage": "UseDevelopmentStorage=false;Identity=SystemAssigned",
+      "busCnnString": "Endpoint=sb://dmf-bus.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=ZeRJY9ppmt14lB6vxiKJVyLn6anHvtqfO6dO/cpGGwY=",
+      "blobCnnString": "DefaultEndpointsProtocol=https;AccountName=dmfimportexport;AccountKey=g7vxwNajKzKBRqIxQAgPkJoUKdIFmeMejA+bBDdBilSsolWUAh20ZdHnjTVLSEmp38EYpEloXvfi+ASt00HXWg==;EndpointSuffix=core.windows.net",
+      "dynamicsBaseURI": "https://trial-xds72j.trial.operations.dynamics.com/",
+      "d365ClientId": "dc793cf7-25f8-4496-b240-e9f4cb35a775",
+      "d365TenantId": "4818cad8-9a45-4cf1-8937-7e180b450d2c",
+      "d365ClientSecret": "0xm8Q~7qK1kKEwS8ZmAcntsbP2gQcnwFEyfq.c2I"
     }
 }
