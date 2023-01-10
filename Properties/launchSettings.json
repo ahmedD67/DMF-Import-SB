@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "DMF_Import_SB": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7005",
+      "launchBrowser": false
+    }
+  }
+}
