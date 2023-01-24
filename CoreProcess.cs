@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Json;
 using Azure.Storage.Blobs;
+using Microsoft.Azure.WebJobs.Extensions.Storage.Blobs;
 using System.Net.Http.Headers;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
@@ -25,28 +26,25 @@ namespace DMF_Import_SB
 {
     public class CoreProcess
     {
-        private readonly ILogger<CoreProcess> _logger;
-        private string _token;
-
-        public CoreProcess(ILogger<CoreProcess> log)
-        {
-            _logger = log;
-            _token = GetToken();
-        }
-
         [FunctionName("CoreProcess")]
-        public async Task Run([ServiceBusTrigger("import-entities", "CoreProcessSub", Connection = "busCnnString")]string mySbMsg)
+        public async Task Run([ServiceBusTrigger("import-entities", "CoreProcessSub", Connection = "busCnnStrTrigger")]string mySbMsg, ILogger _logger)
         {
             _logger.LogInformation($"C# ServiceBus topic trigger function processed message: {mySbMsg}");
+            var _token = GetToken(_logger);
 
+            
             ImportJobMsg jobMsg = JsonConvert.DeserializeObject<ImportJobMsg>(mySbMsg);
 
             var baseURI = Environment.GetEnvironmentVariable("dynamicsBaseURI");
             HttpClient _client = new HttpClient();
             _client.BaseAddress = new Uri(baseURI);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
+            
+            _logger.LogInformation("_token: " + _token);
+            
+            string packageUrl = GetImportURL(_client, jobMsg, _logger);
 
-            string packageUrl = GetImportURL(_client, jobMsg);
+            _logger.LogInformation("Pkg URL: " + packageUrl);
 
             ImportJobPayload importPkgPayload = new ImportJobPayload()
             {
@@ -57,13 +55,19 @@ namespace DMF_Import_SB
                 overwrite = true,
                 legalEntityId = "DAT"
             };
-
-            await ImportPackage(_client, importPkgPayload);
+            try {
+            await TransferBlobs(packageUrl, jobMsg.uniqueFileName, _logger);
+            await ImportPackage(_client, importPkgPayload); }
+            catch (Exception ex)
+            {
+                _logger.LogInformation(ex.ToString());
+            }
         }
 
         // Get token for DMF access
-        private string GetToken()
+        private string GetToken(ILogger _logger)
         {
+            _logger.LogInformation("Getting token.");
             var clientId = Environment.GetEnvironmentVariable("d365ClientId");
             var tenantId = Environment.GetEnvironmentVariable("d365TenantId");
             var clientSecret = Environment.GetEnvironmentVariable("d365ClientSecret");
@@ -76,20 +80,23 @@ namespace DMF_Import_SB
             return confidentialApp.AcquireTokenForClient(scopes).ExecuteAsync().Result.AccessToken;
         }
 
-        public string GetImportURL(HttpClient _client, ImportJobMsg jobMsg)
+        public string GetImportURL(HttpClient _client, ImportJobMsg jobMsg, ILogger _logger)
         {
             string endpoint = "/data/DataManagementDefinitionGroups/Microsoft.Dynamics.DataEntities.GetAzureWriteUrl";
             string reqPayload = $"{{\"uniqueFileName\":\"{jobMsg.uniqueFileName}\"}}";
             StringContent reqContent = new StringContent(reqPayload, Encoding.UTF8, "application/json");
-            return JsonConvert.DeserializeObject<WritableURLResponse>(
+            string uri = JsonConvert.DeserializeObject<WritableURLResponse>(
                 _client.PostAsync(endpoint, reqContent).Result.Content.ReadAsStringAsync().Result
             ).GetURI();
+            _logger.LogInformation($"Got ImportURI: {uri}");
+            return uri;
         }
 
-        public async Task TransferBlobs(string sinkCnnString, string uniqueFileName, ILogger log)
+        public static async Task TransferBlobs(string sinkCnnString, string uniqueFileName, ILogger log)
         {
+            log.LogInformation(sinkCnnString);
             // cnn string, source container, and blobName
-            string sourceSAS = Environment.GetEnvironmentVariable("blobCnnString");
+            string sourceSAS = Environment.GetEnvironmentVariable("BlobCnn");
             Uri sinkURI = new Uri(sinkCnnString);
             BlobClient sinkBlobClient = new BlobClient(sinkURI);
 
@@ -101,6 +108,7 @@ namespace DMF_Import_SB
             var result = await sinkBlobClient.StartCopyFromUriAsync(sourceBlobClient.Uri);
             log.LogInformation("Copy blob request sent....");
             log.LogInformation("============");
+            /*
             bool isBlobCopiedSuccessfully = false;
             do
             {
@@ -116,7 +124,7 @@ namespace DMF_Import_SB
                     isBlobCopiedSuccessfully = sinkBlobProperties.Value.CopyStatus.ToString() == "Success";
                     break;
                 }
-            } while (true);
+            } while (true); */
         }
 
         public async Task ImportPackage(HttpClient _client, ImportJobPayload jobPayload)
