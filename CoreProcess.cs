@@ -85,13 +85,16 @@ namespace DMF_Import_SB
 
         public string GetImportURL(HttpClient _client, ImportJobMsg jobMsg, ILogger _logger)
         {
+            string uri;
+            try {
             string endpoint = "/data/DataManagementDefinitionGroups/Microsoft.Dynamics.DataEntities.GetAzureWriteUrl";
             string reqPayload = $"{{\"uniqueFileName\":\"{jobMsg.uniqueFileName}\"}}";
             StringContent reqContent = new StringContent(reqPayload, Encoding.UTF8, "application/json");
-            string uri = JsonConvert.DeserializeObject<WritableURLResponse>(
+            uri = JsonConvert.DeserializeObject<WritableURLResponse>(
                 _client.PostAsync(endpoint, reqContent).Result.Content.ReadAsStringAsync().Result
             ).GetURI();
-            _logger.LogInformation($"Got ImportURI: {uri}");
+            _logger.LogInformation($"Got ImportURI: {uri}"); }
+            catch (Exception ex) {_logger.LogInformation(ex); }
             return uri;
         }
 
