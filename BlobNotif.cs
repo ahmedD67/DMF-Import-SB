@@ -21,7 +21,7 @@ namespace DMF_Import_SB
             log.LogInformation($"C# Blob trigger function Processed blob\n Name:{name} \n Size: {myBlob.Length} Bytes");
             ImportJobMsg jobMsg = new ImportJobMsg() {
                 uniqueFileName = name,
-                definitionGroupId = "Ahmed-Import"
+                definitionGroupId = "{3D019748-EFD2-40D3-B19F-6BF3C91F1C7B}"
             };
             //random
             await SendMessage(jobMsg, log);
