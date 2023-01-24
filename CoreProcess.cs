@@ -35,7 +35,7 @@ namespace DMF_Import_SB
             
             ImportJobMsg jobMsg = JsonConvert.DeserializeObject<ImportJobMsg>(mySbMsg);
             
-            _logger.LogInformation(jobMsg);
+            _logger.LogInformation(mySbMsg);
 
             var baseURI = Environment.GetEnvironmentVariable("dynamicsBaseURI");
             _logger.LogInformation(baseURI);
