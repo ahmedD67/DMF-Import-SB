@@ -34,8 +34,11 @@ namespace DMF_Import_SB
 
             
             ImportJobMsg jobMsg = JsonConvert.DeserializeObject<ImportJobMsg>(mySbMsg);
+            
+            _logger.LogInformation(jobMsg);
 
             var baseURI = Environment.GetEnvironmentVariable("dynamicsBaseURI");
+            _logger.LogInformation(baseURI);
             HttpClient _client = new HttpClient();
             _client.BaseAddress = new Uri(baseURI);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
