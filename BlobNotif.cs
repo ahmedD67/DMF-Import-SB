@@ -23,6 +23,7 @@ namespace DMF_Import_SB
                 uniqueFileName = name,
                 definitionGroupId = "Ahmed-Import"
             };
+            //random
             await SendMessage(jobMsg, log);
         }
         private async Task SendMessage(ImportJobMsg msg, ILogger _log)
