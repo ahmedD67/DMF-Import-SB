@@ -60,7 +60,8 @@ namespace DMF_Import_SB
             };
             try {
             await TransferBlobs(packageUrl, jobMsg.uniqueFileName, _logger);
-            await ImportPackage(_client, importPkgPayload); }
+            await ImportPackage(_client, importPkgPayload); ;
+            _logger.LogInformation("Function is complete."); }
             catch (Exception ex)
             {
                 _logger.LogInformation(ex.ToString());
