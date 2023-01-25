@@ -103,8 +103,7 @@ namespace DMF_Import_SB
             log.LogInformation(sinkCnnString);
             // cnn string, source container, and blobName
             string sourceSAS = Environment.GetEnvironmentVariable("BlobCnn");
-            Uri sinkURI = new Uri(sinkCnnString);
-            BlobClient sinkBlobClient = new BlobClient(sinkURI);
+            BlobClient sinkBlobClient = new BlobClient(new Uri(sinkCnnString));
 
             // BlobServiceClient serviceClient = new BlobServiceClient(connectionString);
             BlobContainerClient sourceContainerClient = new BlobContainerClient(new Uri(sourceSAS));
