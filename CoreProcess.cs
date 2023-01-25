@@ -105,9 +105,6 @@ namespace DMF_Import_SB
             // cnn string, source container, and blobName
             string sourceSAS = Environment.GetEnvironmentVariable("BlobCnn");
             BlobClient sinkBlobClient = new BlobClient(new Uri(sinkCnnString));
-            }
-            catch (Exception ex) {log.LogInformation(ex.Message);}
-            try {
             // BlobServiceClient serviceClient = new BlobServiceClient(connectionString);
             BlobContainerClient sourceContainerClient = new BlobContainerClient(sourceSAS, "dmf-import-customers");
             BlobClient sourceBlobClient = sourceContainerClient.GetBlobClient(uniqueFileName);
