@@ -109,7 +109,7 @@ namespace DMF_Import_SB
             catch (Exception ex) {_logger.LogInformation(ex.Message);}
             try {
             // BlobServiceClient serviceClient = new BlobServiceClient(connectionString);
-            BlobContainerClient sourceContainerClient = new BlobContainerClient(new Uri(sourceSAS));
+            BlobContainerClient sourceContainerClient = new BlobContainerClient(sourceSAS, "dmf-import-customers");
             BlobClient sourceBlobClient = sourceContainerClient.GetBlobClient(uniqueFileName);
             
             log.LogInformation("Sending copy blob request....");
