@@ -90,9 +90,9 @@ namespace DMF_Import_SB
             string endpoint = "/data/DataManagementDefinitionGroups/Microsoft.Dynamics.DataEntities.GetAzureWriteUrl";
             string reqPayload = $"{{\"uniqueFileName\":\"{jobMsg.uniqueFileName}\"}}";
             StringContent reqContent = new StringContent(reqPayload, Encoding.UTF8, "application/json");
-            uri = JsonConvert.DeserializeObject<WritableURLResponse>(
-                _client.PostAsync(endpoint, reqContent).Result.Content.ReadAsStringAsync().Result
-            ).GetURI();
+            string response = _client.PostAsync(endpoint, reqContent).Result.Content.ReadAsStringAsync().Result;
+            _logger.LogInformation(response);
+            uri = JsonConvert.DeserializeObject<WritableURLResponse>(response).GetURI();
             _logger.LogInformation($"Got ImportURI: {uri}"); }
             catch (Exception ex) {_logger.LogInformation(ex.Message); }
             return uri;
