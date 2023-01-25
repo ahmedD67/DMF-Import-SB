@@ -100,11 +100,14 @@ namespace DMF_Import_SB
 
         public static async Task TransferBlobs(string sinkCnnString, string uniqueFileName, ILogger log)
         {
+            try {
             log.LogInformation(sinkCnnString);
             // cnn string, source container, and blobName
             string sourceSAS = Environment.GetEnvironmentVariable("BlobCnn");
             BlobClient sinkBlobClient = new BlobClient(new Uri(sinkCnnString));
-
+            }
+            catch (Exception ex) {_logger.LogInformation(ex.Message);}
+            try {
             // BlobServiceClient serviceClient = new BlobServiceClient(connectionString);
             BlobContainerClient sourceContainerClient = new BlobContainerClient(new Uri(sourceSAS));
             BlobClient sourceBlobClient = sourceContainerClient.GetBlobClient(uniqueFileName);
@@ -112,7 +115,8 @@ namespace DMF_Import_SB
             log.LogInformation("Sending copy blob request....");
             var result = await sinkBlobClient.StartCopyFromUriAsync(sourceBlobClient.Uri);
             log.LogInformation("Copy blob request sent....");
-            log.LogInformation("============");
+            log.LogInformation("============"); }
+            catch (Exception ex) {_logger.LogInformation(ex.Message);}
             /*
             bool isBlobCopiedSuccessfully = false;
             do
