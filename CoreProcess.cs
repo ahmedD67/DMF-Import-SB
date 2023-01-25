@@ -115,7 +115,6 @@ namespace DMF_Import_SB
             log.LogInformation("Copy blob request sent....");
             log.LogInformation("============"); }
             catch (Exception ex) {log.LogInformation(ex.Message);}
-            /*
             bool isBlobCopiedSuccessfully = false;
             do
             {
@@ -131,7 +130,7 @@ namespace DMF_Import_SB
                     isBlobCopiedSuccessfully = sinkBlobProperties.Value.CopyStatus.ToString() == "Success";
                     break;
                 }
-            } while (true); */
+            } while (true);
         }
 
         public async Task ImportPackage(HttpClient _client, ImportJobPayload jobPayload)
