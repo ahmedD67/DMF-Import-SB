@@ -112,7 +112,24 @@ namespace DMF_Import_SB
             log.LogInformation("Sending copy blob request....");
             var result = await sinkBlobClient.StartCopyFromUriAsync(sourceBlobClient.Uri);
             log.LogInformation("Copy blob request sent....");
-            log.LogInformation("============"); }
+            log.LogInformation("============"); 
+            bool isBlobCopiedSuccessfully = false;
+            do
+            {
+                log.LogInformation("Checking copy status....");
+                var sinkBlobProperties = await sinkBlobClient.GetPropertiesAsync();
+                log.LogInformation($"Current copy status = {sinkBlobProperties.Value.CopyStatus}");
+                if (sinkBlobProperties.Value.CopyStatus.ToString() == "Pending")
+                {
+                    System.Threading.Thread.Sleep(1000);
+                }
+                else
+                {
+                    isBlobCopiedSuccessfully = sinkBlobProperties.Value.CopyStatus.ToString() == "Success";
+                    break;
+                }
+            } while (true);
+        }
 
         public async Task ImportPackage(HttpClient _client, ImportJobPayload jobPayload)
         {
