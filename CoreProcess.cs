@@ -106,7 +106,7 @@ namespace DMF_Import_SB
             string sourceSAS = Environment.GetEnvironmentVariable("BlobCnn");
             BlobClient sinkBlobClient = new BlobClient(new Uri(sinkCnnString));
             }
-            catch (Exception ex) {_logger.LogInformation(ex.Message);}
+            catch (Exception ex) {log.LogInformation(ex.Message);}
             try {
             // BlobServiceClient serviceClient = new BlobServiceClient(connectionString);
             BlobContainerClient sourceContainerClient = new BlobContainerClient(sourceSAS, "dmf-import-customers");
@@ -116,7 +116,7 @@ namespace DMF_Import_SB
             var result = await sinkBlobClient.StartCopyFromUriAsync(sourceBlobClient.Uri);
             log.LogInformation("Copy blob request sent....");
             log.LogInformation("============"); }
-            catch (Exception ex) {_logger.LogInformation(ex.Message);}
+            catch (Exception ex) {log.LogInformation(ex.Message);}
             /*
             bool isBlobCopiedSuccessfully = false;
             do
