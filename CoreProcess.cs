@@ -15,12 +15,7 @@ using Newtonsoft.Json;
 using Azure.Identity;
 
 /*
-Steps:
-1. Get Access Token using GetToken(). It uses MSAL
-2. Create HTTP client to act as Postman. Put token in authn header value
-3. GetImportURL() method. This will use client to GetAzureWritableURL with payload constructed from ImportJobMsg "uniqueFileName" property. Parse response and return
-   BlobUrl
-4. 
+This is for the CICD pipeline demo.
 */
 namespace DMF_Import_SB
 {
