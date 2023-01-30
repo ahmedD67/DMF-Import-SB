@@ -10,19 +10,17 @@
     },
     "IsEncrypted": false,
     "Values": {
-        "busCnnString": "dmf-bus.servicebus.windows.net",
-        "dynamicsBaseURI": "https://trial-xds72j.trial.operations.dynamics.com/",
-        "d365ClientId": "dc793cf7-25f8-4496-b240-e9f4cb35a775",
-        "d365TenantId": "4818cad8-9a45-4cf1-8937-7e180b450d2c",
-        "d365ClientSecret": "0xm8Q~7qK1kKEwS8ZmAcntsbP2gQcnwFEyfq.c2I",
-        "AzureWebJobsStorage__blobServiceUri": "https://dmfimportexport.blob.core.windows.net",
-        "BlobCnn": "https://dmfimportexport.blob.core.windows.net",
-        "QueueCnn__queueServiceUri": "https://dmfimportexport.queue.core.windows.net",
+        "busCnnString": "ENTER SERVICE BUSS NAMESPACE STRING",
+        "dynamicsBaseURI": "ENTER DYNAMCIS BASE URL",
+        "d365ClientId": "D365 APP REG CLIENT ID",
+        "d365TenantId": "D365 APP REG TENANT ID",
+        "d365ClientSecret": "D365 APP CLIENT SECRET",
+        "BlobCnn": "STORAGE ACCOUNT CONNECTION STRING",
         "BlobSettings:StorageAccount__credential": "managedidentity",
         "FUNCTIONS_WORKER_RUNTIME": "dotnet"
       },
       "ConnectionStrings": {
-        "BlobCnn": "https://dmfimportexport.blob.core.windows.net",
-        "busCnnString": "dmf-bus.servicebus.windows.net"
+        "BlobCnn": "STORAGE ACCOUNT CONNECTION STRING",
+        "busCnnString": "SERVICE BUS NAMESPACE STRING"
       }
 }
