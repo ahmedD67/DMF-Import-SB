@@ -38,11 +38,8 @@ namespace DMF_Import_SB
             _client.BaseAddress = new Uri(baseURI);
             _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _token);
             
-            _logger.LogInformation("_token: " + _token);
             
             string packageUrl = GetImportURL(_client, jobMsg, _logger);
-
-            _logger.LogInformation("Pkg URL: " + packageUrl);
 
             ImportJobPayload importPkgPayload = new ImportJobPayload()
             {
